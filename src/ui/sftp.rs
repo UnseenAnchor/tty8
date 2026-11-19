@@ -1737,11 +1737,9 @@ impl Tty7App {
         let list_hover = gpui::rgb(cx.global::<crate::ui::presets::Surfaces>().popover.hover);
         let entry = entry.clone();
         let dir_like = is_dir_like(&entry);
-        let icon = if dir_like {
-            IconName::Folder
-        } else {
-            IconName::File
-        };
+        // The same Material glyph the local tree gives this name, so a folder
+        // looks the same whichever host it lives on.
+        let glyph = crate::ui::material_icons::icon_for(&entry.name, dir_like, false);
         let is_symlink = matches!(entry.kind, SftpEntryKind::Symlink);
         let size = if dir_like {
             String::new()
@@ -1783,7 +1781,7 @@ impl Tty7App {
                     this.sftp_open_entry(open_entry.clone(), window, cx)
                 }),
             )
-            .child(Icon::new(icon).size(px(ROW_GLYPH)).text_color(muted))
+            .child(crate::ui::material_icons::glyph(glyph, ROW_GLYPH))
             .child(
                 div()
                     .flex_1()

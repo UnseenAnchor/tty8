@@ -515,11 +515,10 @@ impl Tty7App {
                         .text_color(muted),
                     ),
             )
-            .child(
-                Icon::new(IconName::File)
-                    .size(px(ROW_GLYPH))
-                    .text_color(muted),
-            )
+            .child(crate::ui::material_icons::glyph(
+                crate::ui::material_icons::icon_for(&group.name, false, false),
+                ROW_GLYPH,
+            ))
             .child(
                 h_flex()
                     .flex_1()

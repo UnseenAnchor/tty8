@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **File icons that say what a file is** — The Files tree, the SFTP browser and
+  the search panel's result groups now wear the Material Icon Theme's glyphs
+  instead of one grey file/folder shape: TypeScript in blue, Rust in orange,
+  `src/` a folder with its badge, `node_modules/` its own, open folders the
+  open drawing. The set is vendored under `assets/icons/material` (MIT, licence
+  beside it) and `build.rs` resolves its association table at build time, so the
+  crate holds nothing but `name -> glyph`. They are drawn with `img()` rather
+  than `Icon`: `svg()` paints a tinted alpha mask, which would flatten all 1256
+  glyphs to a single grey.
+
 - **Refresh in the Files header** — The Files tab's heading has a Refresh
   button, like the SFTP browser's, that re-reads every folder the tree is
   showing (#1244).

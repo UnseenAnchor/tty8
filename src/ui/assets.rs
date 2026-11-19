@@ -14,6 +14,11 @@ impl AssetSource for Assets {
         if let Some(bytes) = agent_icon(path) {
             return Ok(Some(Cow::Borrowed(bytes)));
         }
+        // The Material file/folder glyphs are full-colour, so they are drawn by
+        // `img()` — which still reads them through this source.
+        if let Some(bytes) = crate::ui::material_icons::asset(path) {
+            return Ok(Some(bytes));
+        }
         gpui_component_assets::Assets.load(path)
     }
 

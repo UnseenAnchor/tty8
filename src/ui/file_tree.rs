@@ -2332,17 +2332,14 @@ impl Tty7App {
             Some(TreeEdit::Rename { path: p, .. }) if *p == path
         );
 
-        let icon = if row.is_root {
-            IconName::FolderOpen
-        } else if is_dir {
-            if row.expanded {
-                IconName::FolderOpen
-            } else {
-                IconName::Folder
-            }
-        } else {
-            IconName::File
-        };
+        // The glyph is the Material Icon Theme's, in colour, so it comes from
+        // `img()` rather than `Icon` — a tinted alpha mask would flatten the
+        // whole set to one grey.
+        // The theme's own `rootFolder` glyph is a bare marker rather than a
+        // folder, and it only goes unseen in VS Code because the explorer puts
+        // the workspace root in a header row. Here the root is a row like any
+        // other, so it answers by its name like any other folder too.
+        let glyph = crate::ui::material_icons::icon_for(&row.entry.name, is_dir, row.expanded);
 
         let label: AnyElement = if renaming {
             let input = self.file_tree.editing.as_ref().unwrap().input().clone();
@@ -2418,7 +2415,7 @@ impl Tty7App {
                     .flex()
                     .justify_center()
                     .when(row.entry.ignored, |d| d.opacity(0.5))
-                    .child(Icon::new(icon).size(px(ROW_GLYPH)).text_color(muted)),
+                    .child(crate::ui::material_icons::glyph(glyph, ROW_GLYPH)),
             )
             .child(label)
             // A folder with work under it says so with one small dot in the
